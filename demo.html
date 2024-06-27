@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder</title>
+    <style>
+        h1 {
+            font-weight: bold;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0px 20px rgba(14, 0, 0, 0.1);
+            margin-bottom: 35px;
+        }
+        label {
+            display: block;
+            margin-left: 40px;
+            font-weight: bold;
+            padding: 5px;
+        }
+        input, textarea {
+            width: 90%;
+            margin-left: 40px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #2e878e;
+            color: black;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 16px;
+            margin-left: 40px;
+            margin-top: 12px;
+        }
+        button:hover {
+            background-color: #53b2b9;
+        }
+        canvas {
+            border: 1px solid #000;
+            border-radius: 5px;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resume-Builder</h1>
+    <form id="resumeForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required>
+
+        <label for="summary">Summary:</label>
+        <textarea id="summary" name="summary" rows="4" required></textarea>
+
+        <label for="experience">Experience:</label>
+        <textarea id="experience" name="experience" rows="4" required></textarea>
+
+        <label for="education">Education:</label>
+        <textarea id="education" name="education" rows="4" required></textarea>
+
+        <label for="projects">Projects:</label>
+        <textarea id="projects" name="projects" rows="4" required></textarea>
+
+        <button type="button" onclick="generateResume()">Generate Resume</button>
+        <button type="button" onclick="printResume()">Print Resume</button>
+    </form>
+
+    <canvas id="resumeCanvas" width="600" height="800"></canvas>
+
+    <script>
+        function generateResume() {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const summary = document.getElementById("summary").value;
+    const experience = document.getElementById("experience").value;
+    const education = document.getElementById("education").value;
+    const projects = document.getElementById("projects").value;
+
+    const canvas = document.getElementById("resumeCanvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Header Background
+    ctx.fillStyle = "#848484";
+    ctx.fillRect(0, 0, canvas.width, 100);
+
+    // Name
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "Black";
+    ctx.fillText(name, 20, 50 );
+
+    // Contact Information
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "Black";
+    ctx.fillText(email, 20, 70);
+    ctx.fillText(phone, 20, 90);
+
+    // Summary Section
+    ctx.fillStyle = "#848484";
+    ctx.fillRect(0, 110, canvas.width, 30);
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "Black";
+    ctx.fillText("Summary", 20, 130);
+    ctx.font = "14px Arial";
+    wrapText(ctx, summary, 20, 160, 560, 20);
+
+    // Experience Section
+    ctx.fillStyle = "#848484";
+    ctx.fillRect(0, 270, canvas.width, 30);
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "Black";
+    ctx.fillText("Experience", 20, 290);
+    ctx.font = "14px Arial";
+    wrapText(ctx, experience, 20, 320, 560, 20);
+
+    // Education Section
+    ctx.fillStyle = "#848484";
+    ctx.fillRect(0, 430, canvas.width, 30);
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "Black";
+    ctx.fillText("Education", 20, 450);
+    ctx.font = "14px Arial";
+    wrapText(ctx, education, 20, 480, 560, 20);
+
+    // Projects Section
+    ctx.fillStyle = "#848484";
+    ctx.fillRect(0, 590, canvas.width, 30);
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "Black";
+    ctx.fillText("Projects", 20, 610);
+    ctx.font = "14px Arial";
+    wrapText(ctx, projects, 20, 640, 560, 20);
+}
+
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(" ");
+    let line = "";
+    for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + " ";
+        const metrics = context.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + " ";
+            y += lineHeight;
+        } else {
+            line = testLine;
+        }
+    }
+    context.fillText(line, x, y);
+}
+
+document.querySelector('button').addEventListener('click', generateResume);
+
+    </script>
+</body>
+</html>
